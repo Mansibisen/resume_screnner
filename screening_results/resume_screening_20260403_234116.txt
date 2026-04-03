@@ -1,0 +1,44 @@
+
+======================================================================
+                    RESUME SCREENING ANALYSIS REPORT
+======================================================================
+
+📊 OVERALL FIT SCORE: 85/100
+   🟢 STRONG FIT - You are a competitive candidate for this role
+
+🎯 REQUIREMENT BREAKDOWN:
+   Strong First Principles Problem Solver: [█████████░] 90/100
+   Experience with integration and development of REST services over back-end frameworks (such as Django, Node.js): [█████████░] 95/100
+   Strong Algorithm and Data Structures skillset: [█████████░] 90/100
+   Demonstrated ability to share knowledge via formal mentoring, reviewing code, reviewing design documents, providing technical talks, teaching classes, or as a consultant on projects: [████████░░] 80/100
+   Experience in HLD, LLD design and developing scalable software systems: [████████░░] 85/100
+   Some previous experience in Python based frameworks: [███████░░░] 70/100
+   3-5 years of demonstrated software development experience: [█████████░] 90/100
+   Experience with developing upon Relational or NoSQL Databases at scale: [█████████░] 90/100
+
+✅ MATCHED SKILLS (7)
+   • Django
+   • Python
+   • REST services
+   • Algorithm and Data Structures
+   • Mentoring
+   • Scalable software systems
+   • Database development
+
+❌ MISSING SKILLS (4)
+   • CI/CD frameworks
+   • Deployment experience with AWS, GCP or Azure
+   • Competitive Programming excellence
+   • Django development experience (preferred)
+
+💡 IMPROVEMENT SUGGESTIONS
+   1.  1. **Action:** Incorporate experience with CI/CD frameworks such as Jenkins, GitLab CI, or CircleCI.
+   2.    - **Why it matters:** Employers often look for candidates who can automate and streamline the deployment process, reducing errors and increasing efficiency.
+   3.    - **Expected impact:** Increased chances of being considered for the role due to demonstrating a broader skill set that aligns with modern development practices.
+   5. 2. **Action:** Highlight deployment experience with AWS, GCP, or Azure.
+   6.    - **Why it matters:** These cloud platforms are widely used in the tech industry, and having hands-on experience can make you more attractive to employers.
+   7.    - **Expected impact:** Increased chances of being selected for interviews due to showcasing a relevant skill set that aligns with the job requirements.
+
+======================================================================
+Generated: 2026-04-03 23:41:16
+======================================================================

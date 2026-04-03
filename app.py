@@ -31,6 +31,8 @@ def fetch_job_description(state: JobScreeningState) -> JobScreeningState:
         print(f"⚠️ Error fetching job description: {e}")
         state['job_description'] = ""
     
+    print(f"   Fetched job description (length={len(state['job_description'])} characters)")
+    print(f"   Job description preview: {state['job_description'][:200]}...")
     return state
 
 
@@ -44,6 +46,8 @@ def retrieve_resume_context(state: JobScreeningState) -> JobScreeningState:
     # Get relevant resume sections
     resume_context = analyze_job_fit(state['job_description'], vectorstore)
     state['resume_context'] = resume_context
+    print(f"   Retrieved relevant resume context (length={len(resume_context)} characters)")
+    print(f"   Resume context preview: {resume_context[:200]}...")
     
     return state
 

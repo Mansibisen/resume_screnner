@@ -1,10 +1,8 @@
-from langchain.tools import tool
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import json
 
-@tool
 def scrape_linkedin_job(url: str) -> str:
     """Scrapes the job description and requirements from a LinkedIn URL or returns structured data."""
     try:
