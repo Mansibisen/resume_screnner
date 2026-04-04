@@ -1,93 +1,162 @@
-# Resume Screener with LangGraph
+# Resume Screener with LangGraph & Flask
 
-A powerful LangGraph-based system that analyzes your resume against job postings and provides an acceptance score along with actionable improvement suggestions.
+A powerful AI-driven system that analyzes your resume against job postings and provides an acceptance score along with actionable improvement suggestions. Features a modern web interface built with Flask and a RAG-based backend using LangGraph.
+
+<figure align="center">
+  <img src="docs/screenshots/01_main_dashboard.png" alt="Main Dashboard">
+  <figcaption>Main Dashboard - Enter job posting details here</figcaption>
+</figure>
 
 ## Features
 
 ✨ **Key Capabilities:**
-- **Job URL Analysis**: Automatically fetches job descriptions from LinkedIn URLs
+- **Web-Based Interface**: Clean, intuitive UI for easy resume analysis
+- **Job URL Analysis**: Automatically fetches job descriptions from LinkedIn URLs or paste custom job descriptions
 - **Resume Fit Scoring**: Calculates detailed acceptance scores (0-100) based on requirement matching
 - **Skill Analysis**: Identifies matched and missing skills
-- **Improvement Suggestions**: Provides 5-7 specific, actionable recommendations to improve your resume
-- **Comprehensive Reports**: Generates professional evaluation reports
-- **LangGraph Workflow**: Uses a state machine for reliable, step-by-step processing
+- **Requirement Breakdown**: Individual scores for each job requirement
+- **Improvement Suggestions**: Provides specific, actionable recommendations to improve your resume
+- **Export Results**: Download analysis results as formatted text files
+- **RAG System**: Uses vector embeddings to find relevant resume sections
+- **LangGraph Workflow**: State machine-based processing for reliable analysis
 
 ## Architecture
 
-The system uses a 5-stage LangGraph workflow:
+The system uses a Flask web server with a RAG-based backend:
 
 ```
-START
-  ↓
-[1] Fetch Job Description → Scrapes LinkedIn job posting
-  ↓
-[2] Retrieve Resume Context → Finds relevant resume sections using vector embeddings
-  ↓
-[3] Calculate Fit Score → Analyzes resume against requirements
-  ↓
-[4] Generate Suggestions → Creates improvement recommendations
-  ↓
-[5] Generate Final Report → Compiles comprehensive evaluation
-  ↓
-END
+┌─────────────────────────────────────────┐
+│     Flask Web Interface (Port 5000)      │
+│  • Input Panel: Job URL / Description   │
+│  • Results Panel: Analysis Visualization │
+└──────────┬──────────────────────────────┘
+           │
+           ↓
+┌─────────────────────────────────────────┐
+│       Backend API (/api/analyze)        │
+└──────────┬──────────────────────────────┘
+           │
+    ┌──────┴───────┬─────────────┐
+    ↓              ↓             ↓
+[Job Scraper]  [RAG Retriever] [LLM Analyzer]
+    │              │             │
+    └──────┬───────┴─────────────┘
+           ↓
+┌─────────────────────────────────────────┐
+│   Analysis Results & Suggestions        │
+│  • Overall Fit Score (0-100)            │
+│  • Matched/Missing Skills               │
+│  • Requirement Scores                   │
+│  • Improvement Recommendations          │
+└─────────────────────────────────────────┘
 ```
+
+### Workflow Steps:
+
+1. **Job Fetching**: Scrapes LinkedIn job postings or accepts custom descriptions
+2. **Resume Retrieval**: Uses vector embeddings to find relevant resume sections from ChromaDB
+3. **Fit Analysis**: LLM analyzes resume against job requirements
+4. **Scoring**: Calculates overall and requirement-specific scores
+5. **Recommendations**: Generates actionable improvement suggestions
+6. **Display**: Results rendered in the web UI with visual indicators
 
 ## Installation
 
-1. **Install Dependencies**:
+### Prerequisites
+- Python 3.8+
+- Ollama running locally (with a model like `llama2`, `mistral`, or `neural-chat`)
+- Your resume as a PDF file
+
+### Setup Steps
+
+1. **Clone the Repository**:
+```bash
+cd resume_screener
+```
+
+2. **Create a Virtual Environment**:
+```bash
+python3 -m venv myenv
+source myenv/bin/activate  # On Windows: myenv\Scripts\activate
+```
+
+3. **Install Dependencies**:
 ```bash
 pip install -r requirement.txt
 ```
 
 Required packages:
-- `langgraph`: Graph-based workflow orchestration
-- `langchain`, `langchain-core`, `langchain-community`: LLM framework
-- `langchain_openai`: OpenAI integration
-- `langchain_chroma`: Vector database
+- `flask`: Web framework
+- `langchain`, `langchain-core`: LLM framework
+- `langchain_ollama`: Ollama integration
+- `langchain-chroma`: Vector database for RAG
 - `langchain_text_splitters`: Document chunking
 - `requests`, `bs4`: Web scraping
 - `python-dotenv`: Environment variables
+- `streamlit`: Alternative UI option
 
-2. **Set Up OpenAI API**:
+4. **Set Up Ollama**:
 ```bash
-export OPENAI_API_KEY="your-api-key-here"
+# Make sure Ollama is running
+ollama serve
+
+# In another terminal, pull a model
+ollama pull llama2  # or mistral, neural-chat, etc.
 ```
 
-3. **Prepare Your Resume**:
-- Place your resume as `resume.pdf` in the project directory
-- The system will automatically embed it into a ChromaDB vector store
+5. **Configure Environment**:
+Edit `config_local.py` to set:
+```python
+OLLAMA_BASE_URL = "http://localhost:11434"  # Ollama server URL
+LLM_MODEL = "llama2"                        # Your chosen model
+EMBEDDING_MODEL = "nomic-embed-text"        # For embeddings
+```
+
+6. **Prepare Your Resume**:
+- Place your resume as `resume.pdf` in the `resume_screener` directory
+- The system will automatically process it and create a ChromaDB vector store
 
 ## Usage
 
-### Run the Resume Screener
+### Option 1: Web Interface (Recommended)
+
+1. **Start the Flask Application**:
+```bash
+python flask_app.py
+```
+
+2. **Open the Web Interface**:
+   - Navigate to `http://localhost:5000` in your browser
+   - You should see the Resume Screener interface
+
+3. **Analyze Your Resume**:
+   - Your resume is already loaded and ready
+   - Enter either a LinkedIn job URL or paste a job description
+   - Click "Analyze Resume Against Job"
+   - Wait for the analysis to complete (usually 30-60 seconds)
+
+4. **Review Results**:
+   - See your overall fit score
+   - View matched and missing skills
+   - Review requirement-specific scores
+   - Read improvement suggestions
+   - Download results as a text file
+
+### Option 2: Command Line (CLI)
 
 ```bash
-python -m resume_screener.app
+python app.py
 ```
 
-You'll be prompted to enter a LinkedIn job URL:
+Then follow the prompts to enter a job URL or description.
+
+### Option 3: Streamlit Interface
+
+```bash
+streamlit run streamlit_app.py
 ```
-Enter the job URL: https://www.linkedin.com/jobs/view/1234567890
-```
 
-### Output
-
-The system provides:
-
-1. **Fit Score** (0-100): Overall compatibility with the job
-
-2. **Requirement Scores**: Individual scores for each job requirement
-
-3. **Skill Analysis**:
-   - Matched skills from your resume
-   - Missing skills you should add
-
-4. **Improvement Suggestions** with:
-   - Specific actions to take
-   - Why each improvement matters
-   - Expected impact on fit score
-
-5. **Professional Report**: A comprehensive summary with recommendation
+A Streamlit-based alternative UI with the same functionality.
 
 ## Example Output
 
@@ -131,162 +200,319 @@ The system provides:
 ...
 ```
 
+## Screenshots & Demo
+
+### Web Interface Overview
+
+#### 1. Main Dashboard
+
+The main dashboard shows:
+- **Header**: "Resume Screener" title with description
+- **Left Panel**: Resume status indicator and job posting input area
+  - Shows "Your resume is already loaded in the system"
+  - Job URL input field with LinkedIn placeholder
+  - OR divider
+  - Job description textarea for custom input
+  - "Analyze Resume Against Job" button (disabled until input provided)
+- **Right Panel**: Results panel (empty until analysis runs)
+
+<div align="center">
+  <img src="static/Screenshot 2026-04-04 at 2.10.59 PM.png" alt="Main Dashboard" width="800">
+  <p><em>Main Dashboard - Job score </em></p>
+</div>
+
+<div align="center">
+  <img src="static/Screenshot 2026-04-04 at 2.11.21 PM.png" alt="Analysis Loading" width="800">
+  <p><em>Resume report </em></p>
+</div>
+
+<div align="center">
+  <img src="static/Screenshot 2026-04-04 at 2.11.32 PM.png" alt="Analysis Results" width="800">
+  <p><em>Complete analysis results with all suggestions</em></p>
+</div>
+
+---
+
+#### 2. Analysis in Progress
+
+Shows:
+- Loading overlay with spinner
+- Message: "Analyzing your resume against the job posting..."
+- Analyze button disabled during processing
+
+
+---
+
+#### 3. Results Display
+
+Displays comprehensive analysis results:
+- **Score Card Section**:
+  - Overall Fit Score (0-100%) with color-coded status
+  - Matched Skills count
+  - Missing Skills count
+- **Skills Section**:
+  - ✅ Matched Skills (green tags)
+  - ❌ Missing Skills (red tags)
+- **Experience Fit**: Summary of experience alignment
+- **Requirement Scores**: Individual requirement breakdowns with progress bars
+- **Improvement Suggestions**: Numbered list of actionable recommendations
+
+<div align="center">
+  <img src="static/Screenshot 2026-04-04 at 2.11.32 PM.png" alt="Analysis Results" width="800">
+  <p><em>Complete analysis results with all scores and suggestions</em></p>
+</div>
+
+---
+
+#### 4. Downloaded Report
+
+Example of downloaded text file showing:
+- Timestamp and analysis parameters
+- Overall fit score
+- Matched and missing skills list
+- Experience fit assessment
+- Requirement scores table
+- Improvement suggestions
+
+---
+
+### Color Scheme & Visual Design
+
+The interface uses:
+- **Primary Colors**: Purple gradient (#667eea to #764ba2)
+- **Success**: Green (#28a745) for matched items
+- **Warning**: Yellow (#ffc107) for moderate scores
+- **Danger**: Red (#dc3545) for missing items
+- **Score Ratings**:
+  - 🟢 Excellent Match: 75%+
+  - 🟡 Good Match: 50-74%
+  - 🔴 Fair Match: Below 50%
+
+---
+
+##  Screenshots
+
+### Prerequisites
+- Flask app running on `http://localhost:5000`
+- Resume already loaded in the system
+
+### Steps
+1. **Main Dashboard**: 
+   - Open the app, don't enter any job info
+   - Take full-page screenshot
+
+2. **Analysis Loading**:
+   - Paste a job description
+   - Click analyze and immediately screenshot before loading completes
+
+3. **Results Display**:
+   - Wait for analysis to complete
+   - Scroll to show all results sections
+   - Take full-page screenshot
+
+4. **Download Report**:
+   - Click "Download Results" button
+   - Open the generated `.txt` file
+   - Screenshot showing the report format
+
+### Screenshot Storage
+Create a `docs/screenshots/` directory and save images as:
+- `01_main_dashboard.png`
+- `02_analysis_loading.png`
+- `03_analysis_results.png`
+- `04_download_report.png`
+
+Update the image paths in this README after adding screenshots.
 ## How It Works
 
-### 1. Job Description Fetching
-- Scrapes LinkedIn job posting using BeautifulSoup
-- Handles multiple HTML structures for robustness
+### 1. Web Request Flow
+- User enters job URL or description in the Flask web interface
+- Frontend sends API request to `/api/analyze` endpoint
+- Flask backend processes the request
+
+### 2. Job Description Fetching
+- If URL is provided: System scrapes LinkedIn job posting using BeautifulSoup
+- If description is provided: Uses the custom text directly
 - Extracts full job description and requirements
 
-### 2. Resume Analysis
-- Loads your PDF resume using `PyPDFLoader`
-- Chunks it into 500-character segments with overlap
-- Converts to embeddings using OpenAI's embedding model
-- Stores in ChromaDB vector database
+### 3. Resume Context Retrieval (RAG)
+- Your pre-loaded resume is stored in ChromaDB vector database
+- System converts job description to embeddings
+- Performs semantic search to find 4 most relevant resume sections
+- Combines relevant sections for analysis
 
-### 3. Relevance Retrieval
-- Queries the vector database with the job description
-- Retrieves the 4 most relevant resume sections
-- Combines them for analysis
-
-### 4. Fit Scoring
-- Uses GPT-4o-mini to analyze resume vs. requirements
-- Scores each requirement on a 0-100 scale
+### 4. LLM-Based Analysis
+- Ollama LLM analyzes resume context against job requirements
+- Scores each requirement on a 0-100 scale using structured prompts
 - Identifies matched and missing skills
 - Evaluates overall experience fit
+- Generates JSON response with structured data
 
 ### 5. Improvement Suggestions
-- Analyzes gaps between resume and job requirements
-- Generates 5-7 specific, actionable recommendations
-- Explains why each suggestion matters
-- Estimates impact on overall fit score
+- LLM generates specific, actionable recommendations
+- Based on gaps between resume and job requirements
+- Provides concrete steps to improve candidacy
+- Returns suggestions as formatted text
 
-### 6. Final Report
-- Compiles all findings into a professional report
-- Provides clear recommendation on whether to apply
-- Actionable insights for resume improvement
-
-## State Management
-
-The system uses a `JobScreeningState` TypedDict to maintain state throughout the workflow:
-
-```python
-class JobScreeningState(TypedDict):
-    job_url: str                           # Input: LinkedIn job URL
-    job_description: Optional[str]         # Scraped job posting
-    resume_context: Optional[str]          # Relevant resume sections
-    fit_score: Optional[dict]              # Scoring analysis
-    improvement_suggestions: Optional[list] # Recommendations
-    final_report: Optional[str]            # Compiled report
-```
+### 6. Results Rendering
+- Flask API returns JSON with fit score and suggestions
+- Frontend JavaScript displays results dynamically
+- Shows visualizations: score cards, skill tags, progress bars
+- User can download analysis as text file
 
 ## Configuration
 
-### Customize Chunk Size
-Edit `retriever.py`:
+### Ollama Settings
+Edit `config_local.py`:
 ```python
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,  # Adjust as needed
-    chunk_overlap=50
-)
+# Ollama Server Configuration
+OLLAMA_BASE_URL = "http://localhost:11434"
+
+# Model Selection (common options)
+LLM_MODEL = "llama2"            # Good general model
+# LLM_MODEL = "mistral"         # Faster and more accurate
+# LLM_MODEL = "neural-chat"     # Optimized for chat
+
+# Embedding Model
+EMBEDDING_MODEL = "nomic-embed-text"  # For semantic search
+
+# LLM Parameters
+LLM_TEMPERATURE = 0.3  # Lower = more consistent; Higher = more creative
+
+# Suggestion Count
+NUM_IMPROVEMENT_SUGGESTIONS = 5
 ```
 
-### Adjust Retrieval Results
-Edit `retriever.py`:
-```python
-retriever = vectorstore.as_retriever(search_kwargs={"k": 4})  # Top 4 results
-```
-
-### Change LLM Model
-Edit `app.py`:
-```python
-llm = ChatOpenAI(model="gpt-4", temperature=0)  # Use gpt-4 instead
-```
+### Vector Database
+- **Type**: ChromaDB (persistent local storage)
+- **Location**: `chroma_db/` directory
+- **Persistence**: Automatically saved on disk
+- **Refresh**: Delete `chroma_db/` to force re-index
 
 ## Advanced Usage
 
-### Programmatic Usage
+### Programmatic API Usage
 
 ```python
-from resume_screener.app import screen_resume
+import requests
 
-# Screen resume for a job
-result = screen_resume("https://www.linkedin.com/jobs/view/1234567890")
+# Call the API directly
+response = requests.post('http://localhost:5000/api/analyze', json={
+    'job_url': 'https://www.linkedin.com/jobs/view/...',
+    # OR use job_description instead:
+    # 'job_description': 'Senior Python Developer...'
+})
 
-# Access results
+result = response.json()
 print(f"Fit Score: {result['fit_score']['overall_score']}/100")
-print(f"Suggestions: {result['improvement_suggestions']}")
-print(f"Report: {result['final_report']}")
+print(f"Suggestions: {result['suggestions']}")
 ```
 
-### Custom Analysis
+### Custom Resume Loading
 
 ```python
-from resume_screener.retriever import initialize_resume_db, analyze_job_fit
-from resume_screener.tools import scrape_linkedin_job
+from retriever_local import initialize_resume_db_local
 
-# Load resume
-vectorstore = initialize_resume_db("resume.pdf")
-
-# Get job description
-job_desc = scrape_linkedin_job(job_url)
-
-# Get relevant resume sections
-context = analyze_job_fit(job_desc, vectorstore)
+# Load a specific resume PDF
+vectorstore = initialize_resume_db_local('path/to/your/resume.pdf')
 ```
 
 ## Troubleshooting
 
-**Issue**: "Could not retrieve job description"
-- **Solution**: Ensure LinkedIn URL is correct and publicly accessible
-- Try viewing the job in your browser first
-- Some jobs may require authentication
+**Issue**: "Network error" or "Ollama not available"
+- **Solution**: Ensure Ollama is running:
+  ```bash
+  # Terminal 1: Start Ollama
+  ollama serve
+  
+  # Terminal 2: Verify it's running
+  curl http://localhost:11434/api/tags
+  ```
+
+**Issue**: Model not found
+- **Solution**: Pull the required model:
+  ```bash
+  ollama pull llama2
+  ollama pull mistral
+  ollama pull neural-chat
+  ```
 
 **Issue**: "ChromaDB connection error"
-- **Solution**: Delete the `chroma_db` folder and reinitialize:
+- **Solution**: Reinitialize the database:
   ```bash
-  rm -rf chroma_db
-  python -m resume_screener.app
+  rm -rf chroma_db/
+  python flask_app.py  # Will recreate on first run
   ```
 
-**Issue**: "OpenAI API key not found"
-- **Solution**: Set your API key:
+**Issue**: Slow analysis (>2 minutes)
+- **Solution**: Try a faster model:
   ```bash
-  export OPENAI_API_KEY="sk-..."
+  ollama pull mistral  # Generally faster than llama2
+  # Update config_local.py: LLM_MODEL = "mistral"
   ```
 
-**Issue**: "Embedding model error"
-- **Solution**: Ensure you have credits on your OpenAI account
-- Check API key permissions
+**Issue**: Analysis results don't match resume
+- **Solution**: Verify resume is properly indexed:
+  1. Delete `chroma_db/` folder
+  2. Ensure `resume.pdf` is in the correct location
+  3. Restart Flask app
+  4. Check console for embedding messages
 
 ## Best Practices
 
-1. **Update Your Resume**: Keep your resume PDF current before running analyses
+1. **Keep Resume Updated**: Your PDF should be current before analyses
 
-2. **Multiple Jobs**: Run the screener for multiple similar jobs to see common gaps
+2. **Use Specific Job Descriptions**: More detail = more accurate analysis
 
-3. **Track Improvements**: Note suggestions across jobs to identify priority improvements
+3. **Try Multiple Models**: Different models may provide different insights:
+   - `llama2`: Best accuracy
+   - `mistral`: Faster, good balance
+   - `neural-chat`: Optimized for conversation
 
-4. **Tailor Context**: Add more detail to your resume for roles you're most interested in
+4. **Review Suggestions**: AI suggestions are helpful but require professional judgment
 
-5. **Review Suggestions**: Not all AI suggestions may be valid - use professional judgment
+5. **Track Patterns**: Run multiple analyses to identify common skill gaps
+
+6. **Batch Processing**: Analyze multiple similar roles to prioritize improvements
 
 ## Future Enhancements
 
-- 📧 Email integration to analyze job postings directly
-- 🔄 Batch processing multiple jobs
-- 📊 Dashboard for tracking scores over time
-- 🤖 Resume auto-improvement using AI
-- 💾 Save/compare multiple job analyses
-- 🌐 Support for other job boards (Indeed, Glassdoor, etc.)
+- 📧 Email integration for direct job posting analysis
+- 🔄 Batch processing for multiple job postings
+- 📊 Dashboard showing score trends over time
+- 💾 Save/compare multiple analyses
+- 🌐 Support for Indeed, Glassdoor, and other job boards
+- 🎯 Resume optimization suggestions with AI rewrites
+- 📈 Skills gap tracking and learning path recommendations
+
+## Project Structure
+
+```
+resume_screener/
+├── flask_app.py              # Main Flask web server
+├── app.py                    # CLI version
+├── streamlit_app.py          # Streamlit UI version
+├── config_local.py           # Local configuration
+├── retriever_local.py        # RAG system (ChromaDB + embeddings)
+├── tools.py                  # Utility functions (LinkedIn scraper)
+├── templates/
+│   └── index.html           # Web UI HTML
+├── static/
+│   ├── app.js               # Frontend JavaScript
+│   └── style.css            # Styling
+├── chroma_db/               # Vector database (auto-created)
+├── myenv/                   # Python virtual environment
+└── README.md                # This file
+```
 
 ## Support
 
-For issues or questions:
-1. Check the troubleshooting section
-2. Verify all dependencies are installed: `pip install -r requirement.txt`
-3. Ensure your OpenAI API key is valid
-4. Check that your resume PDF exists in the project directory
+For issues:
+1. Check Ollama is running: `curl http://localhost:11434/api/tags`
+2. Verify dependencies: `pip list | grep -E "langchain|chromadb|flask"`
+3. Check logs in Flask console for detailed error messages
+4. Try a different model if results are inconsistent
+5. Delete `chroma_db/` and restart if database issues persist
 
 ## License
 
