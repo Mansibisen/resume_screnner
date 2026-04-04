@@ -217,17 +217,17 @@ The main dashboard shows:
 - **Right Panel**: Results panel (empty until analysis runs)
 
 <div align="center">
-  <img src="static/Screenshot 2026-04-04 at 2.10.59 PM.png" alt="Main Dashboard" width="800">
+  <img src="static/01_main_dashboard%20PM.png" alt="Main Dashboard" width="800">
   <p><em>Main Dashboard - Job score </em></p>
 </div>
 
 <div align="center">
-  <img src="static/Screenshot 2026-04-04 at 2.11.21 PM.png" alt="Analysis Loading" width="800">
+  <img src="static/02_analysis_loading%20PM.png" alt="Analysis Loading" width="800">
   <p><em>Resume report </em></p>
 </div>
 
 <div align="center">
-  <img src="static/Screenshot 2026-04-04 at 2.11.32 PM.png" alt="Analysis Results" width="800">
+  <img src="static/03_analysis_results%20PM.png" alt="Analysis Results" width="800">
   <p><em>Complete analysis results with all suggestions</em></p>
 </div>
 
@@ -256,11 +256,6 @@ Displays comprehensive analysis results:
 - **Experience Fit**: Summary of experience alignment
 - **Requirement Scores**: Individual requirement breakdowns with progress bars
 - **Improvement Suggestions**: Numbered list of actionable recommendations
-
-<div align="center">
-  <img src="static/Screenshot 2026-04-04 at 2.11.32 PM.png" alt="Analysis Results" width="800">
-  <p><em>Complete analysis results with all scores and suggestions</em></p>
-</div>
 
 ---
 
