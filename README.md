@@ -2,11 +2,6 @@
 
 A powerful AI-driven system that analyzes your resume against job postings and provides an acceptance score along with actionable improvement suggestions. Features a modern web interface built with Flask and a RAG-based backend using LangGraph.
 
-<figure align="center">
-  <img src="docs/screenshots/01_main_dashboard.png" alt="Main Dashboard">
-  <figcaption>Main Dashboard - Enter job posting details here</figcaption>
-</figure>
-
 ## Features
 
 ✨ **Key Capabilities:**
@@ -217,17 +212,17 @@ The main dashboard shows:
 - **Right Panel**: Results panel (empty until analysis runs)
 
 <div align="center">
-  <img src="static/01_main_dashboard%20PM.png" alt="Main Dashboard" width="800">
+  <img src="static/01_main_dashboard.png" alt="Main Dashboard" width="800">
   <p><em>Main Dashboard - Job score </em></p>
 </div>
 
 <div align="center">
-  <img src="static/02_analysis_loading%20PM.png" alt="Analysis Loading" width="800">
+  <img src="static/02_analysis_loading.png" alt="Analysis Loading" width="800">
   <p><em>Resume report </em></p>
 </div>
 
 <div align="center">
-  <img src="static/03_analysis_results%20PM.png" alt="Analysis Results" width="800">
+  <img src="static/03_analysis_results.png" alt="Analysis Results" width="800">
   <p><em>Complete analysis results with all suggestions</em></p>
 </div>
 
