@@ -1,0 +1,35 @@
+
+======================================================================
+                    RESUME SCREENING ANALYSIS REPORT
+======================================================================
+
+📊 OVERALL FIT SCORE: 75/100
+   🟢 STRONG FIT - You are a competitive candidate for this role
+
+🎯 REQUIREMENT BREAKDOWN:
+   Technical Skills: [████████░░] 80/100
+   Experience: [███████░░░] 70/100
+   Education: [████████░░] 85/100
+   Communication Skills: [█████████░] 90/100
+
+✅ MATCHED SKILLS (4)
+   • Java
+   • Python
+   • SQL
+   • Agile Methodologies
+
+❌ MISSING SKILLS (2)
+   • Docker
+   • Kubernetes
+
+💡 IMPROVEMENT SUGGESTIONS
+   1.  1. **Action:** Incorporate Docker and Kubernetes into your skill set.
+   2.    - **Why it matters:** These are popular containerization and orchestration tools widely used in modern software development, deployment, and management. They help streamline the process of scaling applications and managing infrastructure.
+   3.    - **Expected impact:** Your resume will become more attractive to employers looking for candidates with these skills, potentially increasing your chances of being selected for interviews.
+   5. 2. **Action:** Update your resume to include a section on your experience with Docker and Kubernetes.
+   6.    - **Why it matters:** Employers want to see that you have hands-on experience with the tools they use. Providing specific examples of how you've used these tools in past projects will demonstrate your proficiency.
+   7.    - **Expected impact:** A well-structured section showcasing your experience can help convince employers that you are a strong candidate for roles requiring Docker and Kubernetes expertise.
+
+======================================================================
+Generated: 2026-04-03 23:48:18
+======================================================================

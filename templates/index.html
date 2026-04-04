@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Screener - AI-Powered Job Fit Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>📄 Resume Screener</h1>
+                <p>Analyze how well your resume matches job postings using AI</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="layout">
+                <!-- Left Panel: Inputs -->
+                <div class="input-panel">
+                    <div class="section">
+                        <h2>✅ Resume Status</h2>
+                        <div class="resume-ready-box">
+                            <p class="resume-ready-text">📄 Your resume is already loaded in the system</p>
+                            <p class="resume-ready-desc">The RAG system has access to your complete resume. Just provide a job posting below to start the analysis.</p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>🔗 Job Posting</h2>
+                        <input 
+                            type="text" 
+                            id="jobUrl" 
+                            placeholder="https://www.linkedin.com/jobs/view/..." 
+                            class="input-field"
+                        >
+                        <small class="hint">Paste a LinkedIn job posting URL</small>
+
+                        <div class="divider">OR</div>
+
+                        <textarea 
+                            id="jobDescription" 
+                            placeholder="Paste job description text here..." 
+                            class="textarea-large"
+                        ></textarea>
+                        <small class="hint">Provide the job description directly</small>
+                    </div>
+
+                    <button id="analyzeBtn" class="button-primary">
+                        <span class="button-icon">🔍</span>
+                        <span class="button-text">Analyze Resume Against Job</span>
+                    </button>
+                </div>
+
+                <!-- Right Panel: Results -->
+                <div class="results-panel" id="resultsPanel" style="display: none;">
+                    <div class="results-content">
+                        <h2>📊 Analysis Results</h2>
+
+                        <!-- Score Cards -->
+                        <div class="score-grid">
+                            <div class="score-card" id="scoreCard">
+                                <div class="score-label">Overall Fit Score</div>
+                                <div class="score-value" id="scoreValue">0%</div>
+                                <div class="score-status" id="scoreStatus">-</div>
+                            </div>
+
+                            <div class="score-card">
+                                <div class="score-label">Matched Skills</div>
+                                <div class="score-value" id="matchedCount">0</div>
+                                <div class="score-status positive">Skills you have</div>
+                            </div>
+
+                            <div class="score-card">
+                                <div class="score-label">Missing Skills</div>
+                                <div class="score-value" id="missingCount">0</div>
+                                <div class="score-status negative">Skills to acquire</div>
+                            </div>
+                        </div>
+
+                        <!-- Matched Skills -->
+                        <div class="section">
+                            <h3>✅ Matched Skills</h3>
+                            <div id="matchedSkills" class="skills-container"></div>
+                        </div>
+
+                        <!-- Missing Skills -->
+                        <div class="section">
+                            <h3>❌ Missing Skills</h3>
+                            <div id="missingSkills" class="skills-container"></div>
+                        </div>
+
+                        <!-- Experience Fit -->
+                        <div class="section">
+                            <h3>📈 Experience Fit</h3>
+                            <p id="experienceFit" class="info-box">-</p>
+                        </div>
+
+                        <!-- Requirement Scores -->
+                        <div class="section" id="requirementSection" style="display: none;">
+                            <h3>🎯 Requirement Scores</h3>
+                            <div id="requirementScores"></div>
+                        </div>
+
+                        <!-- Suggestions -->
+                        <div class="section">
+                            <h3>💡 Improvement Suggestions</h3>
+                            <div id="suggestions" class="suggestions-box"></div>
+                        </div>
+
+                        <!-- Download Button -->
+                        <button id="downloadBtn" class="button-secondary">
+                            📥 Download Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Indicator -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p id="loadingText">Analyzing your resume...</p>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Resume Screener | Powered by LangGraph & Ollama | Built with Flask</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
